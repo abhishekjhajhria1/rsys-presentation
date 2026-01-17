@@ -12,7 +12,6 @@
 */
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ───────────────── ANIMATION CONFIG ───────────────── */
@@ -309,9 +308,9 @@ function NavButton({ disabled, children, ...props }: any) {
 function GlowBackground() {
   return (
     <>
-      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-purple-600/30 blur-[120px]" />
-      <div className="absolute top-1/3 -right-40 w-[500px] h-[500px] bg-cyan-500/30 blur-[120px]" />
-      <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] bg-pink-500/20 blur-[120px]" />
+      <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-600/30 blur-[120px]" />
+      <div className="absolute top-1/3 -right-40 w-125 h-125 bg-cyan-500/30 blur-[120px]" />
+      <div className="absolute bottom-0 left-1/3 w-125 h-125 bg-pink-500/20 blur-[120px]" />
     </>
   );
 }
