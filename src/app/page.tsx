@@ -1,219 +1,317 @@
 "use client";
 
-/*
-  RSYS – Round 1 Presentation Website
-  ----------------------------------
-  Purpose:
-  - Explain the problem
-  - Show the enforcement-first design
-  - Heavy wireflow, minimal tech
-  - Used ONLY for Round 1 (Team A)
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-  NOTE FOR LIVE EDITS:
-  - All text blocks are plain JSX
-  - You can safely edit wording during judging
+/*
+  RSYS – Round 1 Presentation Website (FINAL – CONTENT ENRICHED)
+  -------------------------------------------------------------
+  ✔ Same structure & animations
+  ✔ Much richer explanations (judge-friendly)
+  ✔ Still 5-minute safe
+  ✔ No new tech / no new complexity
 */
 
+import { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function PresentationRound1() {
+/* ───────────────── ANIMATION CONFIG ───────────────── */
+const slideVariants = {
+  initial: { opacity: 0, y: 12 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4 },
+  },
+  exit: {
+    opacity: 0,
+    y: -12,
+    transition: { duration: 0.25 },
+  },
+};
+
+export default function PresentationPage() {
+  const [mode, setMode] = useState<"scroll" | "slides">("scroll");
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  const slides = ["hero", "problem", "approach", "wireflow", "difference"];
+  const current = slides[slideIndex];
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
-      {/* Background glow layers (pure visual, no logic) */}
+    <main className="relative min-h-screen bg-slate-950 text-white overflow-hidden">
       <GlowBackground />
 
-      {/* HERO SECTION */}
-      <section className="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6">
-        <h1 className="text-6xl md:text-7xl font-bold tracking-tight">
-          RSYS
-        </h1>
+      {/* MODE TOGGLE */}
+      <div className="fixed top-6 right-6 z-50 flex gap-2">
+        <ToggleButton active={mode === "scroll"} onClick={() => setMode("scroll")}>
+          Scroll
+        </ToggleButton>
+        <ToggleButton active={mode === "slides"} onClick={() => setMode("slides")}>
+          Slides
+        </ToggleButton>
+      </div>
 
-        <p className="mt-6 text-xl text-slate-300 max-w-2xl">
-          A disaster relief system
-          <span className="text-white font-semibold">
-            {" "}where corruption is impossible by design.
-          </span>
-        </p>
-
-        {/* Optional navigation (you can remove if judges prefer clean view) */}
-        <div className="mt-10 flex gap-4">
-          <Link
-            href="/judge"
-            className="px-6 py-3 rounded-xl bg-white text-black font-medium"
-          >
-            Judge Mode (Later)
-          </Link>
+      {/* SLIDE PROGRESS */}
+      {mode === "slides" && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 text-center">
+          <div className="flex justify-center gap-2 mb-2">
+            {slides.map((_, i) => (
+              <div
+                key={i}
+                className={`w-2.5 h-2.5 rounded-full ${
+                  i === slideIndex ? "bg-white" : "bg-white/30"
+                }`}
+              />
+            ))}
+          </div>
+          <div className="text-xs uppercase tracking-widest text-white/70">
+            {slides[slideIndex]}
+          </div>
         </div>
-      </section>
+      )}
 
-      {/* PROBLEM SECTION */}
-      <Section title="The Real Problem">
-        <WireCard>
-          <p className="text-slate-300">
-            Disaster relief systems do not fail at fundraising.
-            <br />
-            They fail after money is collected.
-          </p>
+      <AnimatePresence mode="wait">
+        {(mode === "scroll" || current === "hero") && (
+          <Slide key="hero">
+            <Hero />
+          </Slide>
+        )}
 
-          <ul className="list-disc list-inside mt-6 space-y-2 text-slate-400">
-            <li>No enforcement after donation</li>
-            <li>Opaque fund movement</li>
-            <li>Manual trust in administrators</li>
-            <li>No verifiable outcomes for donors</li>
-          </ul>
-        </WireCard>
-      </Section>
+        {(mode === "scroll" || current === "problem") && (
+          <Slide key="problem">
+            <Problem />
+          </Slide>
+        )}
 
-      {/* SOLUTION SECTION */}
-      <Section title="The RSYS Approach">
-        <WireGrid>
-          <WireNode title="Enforcement First">
-            Rules are enforced by smart contracts,
-            not policies or promises.
-          </WireNode>
+        {(mode === "scroll" || current === "approach") && (
+          <Slide key="approach">
+            <Approach />
+          </Slide>
+        )}
 
-          <WireNode title="Role-Based System">
-            Every actor operates under a strictly
-            limited on-chain role.
-          </WireNode>
+        {(mode === "scroll" || current === "wireflow") && (
+          <Slide key="wireflow">
+            <Wireflow />
+          </Slide>
+        )}
 
-          <WireNode title="Funds Are Locked">
-            Donations cannot be withdrawn
-            without meeting contract conditions.
-          </WireNode>
+        {(mode === "scroll" || current === "difference") && (
+          <Slide key="difference">
+            <Difference />
+          </Slide>
+        )}
+      </AnimatePresence>
 
-          <WireNode title="Fully Auditable">
-            Every action is verifiable on-chain,
-            by anyone.
-          </WireNode>
-        </WireGrid>
-      </Section>
-
-      {/* WIREFLOW SECTION (MOST IMPORTANT) */}
-      <Section title="End-to-End Enforcement Wireflow">
-        <WireFlow />
-      </Section>
-
-      {/* WHY THIS MATTERS */}
-      <Section title="Why This Is Different">
-        <WireCard>
-          <ul className="space-y-3 text-slate-300">
-            <li>✔ No backend authority</li>
-            <li>✔ No manual overrides</li>
-            <li>✔ No admin fund custody</li>
-            <li>✔ No trust assumptions</li>
-            <li>✔ Enforcement happens automatically</li>
-          </ul>
-        </WireCard>
-      </Section>
-
-      {/* CLOSING */}
-      <section className="relative z-10 py-32 text-center px-6">
-        <h2 className="text-4xl font-semibold">
-          Trust is replaced by code.
-        </h2>
-        <p className="mt-4 text-slate-400">
-          RSYS doesn’t promise transparency.
-          <br />
-          It enforces it.
-        </p>
-      </section>
+      {/* SLIDE NAV */}
+      {mode === "slides" && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-4">
+          <NavButton
+            disabled={slideIndex === 0}
+            onClick={() => setSlideIndex((i) => i - 1)}
+          >
+            ← Prev
+          </NavButton>
+          <NavButton
+            disabled={slideIndex === slides.length - 1}
+            onClick={() => setSlideIndex((i) => i + 1)}
+          >
+            Next →
+          </NavButton>
+        </div>
+      )}
     </main>
   );
 }
 
-/* ─────────────── UI HELPERS (SAFE TO EDIT) ─────────────── */
-
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+/* ───────────────── SLIDE WRAPPER ───────────────── */
+function Slide({ children }: { children: React.ReactNode }) {
   return (
-    <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-semibold mb-12 text-center">
-        {title}
-      </h2>
+    <motion.section
+      variants={slideVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="min-h-screen flex items-center justify-center px-6"
+    >
       {children}
-    </section>
+    </motion.section>
   );
 }
 
-function WireCard({ children }: { children: React.ReactNode }) {
+/* ───────────────── SECTIONS ───────────────── */
+
+function Hero() {
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/5 backdrop-blur-md p-8 max-w-3xl mx-auto">
+    <div className="text-center max-w-3xl">
+      <h1 className="text-6xl font-bold">RSYS</h1>
+      <p className="mt-6 text-xl text-slate-300">
+        A disaster relief system where corruption, misuse of funds, and blind
+        trust are{" "}
+        <span className="text-white font-semibold">
+          eliminated by design
+        </span>
+        .
+      </p>
+      <p className="mt-4 text-slate-400 text-sm">
+        Built using smart contracts to enforce how aid money is approved,
+        distributed, and audited — without relying on human honesty.
+      </p>
+      
+    </div>
+  );
+}
+
+function Problem() {
+  return (
+    <Card title="The Problem With Disaster Relief Today">
+      <p className="text-slate-300">
+        Disaster relief systems usually break <b>after</b> donations are
+        collected. Once funds enter the system, donors lose visibility and
+        control.
+      </p>
+      <ul className="list-disc list-inside mt-6 space-y-2 text-slate-400">
+        <li>Funds are managed by centralized authorities</li>
+        <li>Spending decisions are opaque and manual</li>
+        <li>Corruption and delays are difficult to detect</li>
+        <li>Donors cannot verify real-world outcomes</li>
+      </ul>
+      <p className="mt-4 text-slate-400 text-sm">
+        Existing systems rely on trust. RSYS removes that assumption.
+      </p>
+    </Card>
+  );
+}
+
+function Approach() {
+  return (
+    <Grid title="The RSYS Approach">
+      <Node title="Enforcement Over Trust">
+        Instead of trusting administrators, RSYS enforces rules directly at the
+        smart contract level. Invalid actions simply fail on-chain.
+      </Node>
+      <Node title="NFT-Based Roles">
+        Campaign admins, volunteers, victims, and service providers are all
+        represented by NFTs that strictly define what actions an address can
+        perform.
+      </Node>
+      <Node title="Funds Are Never Custodied">
+        No individual or organization can directly access donated funds. Funds
+        remain locked inside contracts until conditions are satisfied.
+      </Node>
+      <Node title="Transparent by Default">
+        Every approval, verification, and payout emits on-chain events that can
+        be independently audited by anyone.
+      </Node>
+    </Grid>
+  );
+}
+
+function Wireflow() {
+  const steps = [
+    "Donor contributes funds to the Relief Pool",
+    "Admin approves a campaign (without touching funds)",
+    "Volunteers verify victims on the ground",
+    "Service providers deliver real aid",
+    "Treasury contract releases funds automatically",
+  ];
+
+  return (
+    <Card title="End-to-End Enforcement Flow">
+      <p className="text-slate-400 text-sm mb-6">
+        This flow shows how RSYS enforces correct behavior at every step without
+        relying on centralized control.
+      </p>
+      {steps.map((s, i) => (
+        <div key={i} className="flex items-center gap-4 mb-4">
+          <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-semibold">
+            {i + 1}
+          </div>
+          <div className="flex-1 bg-white/5 border border-white/20 p-4 rounded-xl">
+            {s}
+          </div>
+        </div>
+      ))}
+    </Card>
+  );
+}
+
+function Difference() {
+  return (
+    <Card title="Why RSYS Is Fundamentally Different">
+      <ul className="space-y-3 text-slate-300">
+        <li>✔ No blind trust in institutions</li>
+        <li>✔ No manual overrides or backdoors</li>
+        <li>✔ No admin custody of funds</li>
+        <li>✔ Fully enforced, rule-based system</li>
+        <li>✔ Donors can audit outcomes independently</li>
+      </ul>
+      <p className="mt-4 text-slate-400 text-sm">
+        RSYS does not try to improve trust — it removes the need for it.
+      </p>
+    </Card>
+  );
+}
+
+/* ───────────────── UI HELPERS ───────────────── */
+
+function Card({ title, children }: any) {
+  return (
+    <div className="max-w-3xl bg-white/5 border border-white/20 backdrop-blur-md p-8 rounded-2xl">
+      <h2 className="text-2xl font-semibold mb-6">{title}</h2>
       {children}
     </div>
   );
 }
 
-function WireGrid({ children }: { children: React.ReactNode }) {
+function Grid({ title, children }: any) {
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      {children}
+    <div className="max-w-5xl">
+      <h2 className="text-2xl font-semibold mb-10 text-center">{title}</h2>
+      <div className="grid md:grid-cols-2 gap-6">{children}</div>
     </div>
   );
 }
 
-function WireNode({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function Node({ title, children }: any) {
   return (
-    <div className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-md p-6">
+    <div className="bg-white/5 border border-white/20 p-6 rounded-xl">
       <h3 className="font-semibold mb-2">{title}</h3>
       <p className="text-slate-300 text-sm">{children}</p>
     </div>
   );
 }
 
-/*
-  WireFlow:
-  - Visual explanation of enforcement
-  - Do NOT over-explain during presentation
-*/
-function WireFlow() {
-  const steps = [
-    "Donor sends funds → Relief Pool",
-    "Admin approves campaign (no fund access)",
-    "Volunteer verifies victims",
-    "Service provider delivers aid",
-    "Treasury releases funds automatically",
-  ];
-
+function ToggleButton({ active, children, ...props }: any) {
   return (
-    <div className="space-y-6">
-      {steps.map((step, index) => (
-        <div key={index} className="flex items-center gap-4">
-          <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold">
-            {index + 1}
-          </div>
-
-          <div className="flex-1 rounded-xl border border-white/20 bg-white/5 backdrop-blur-md p-4">
-            {step}
-          </div>
-        </div>
-      ))}
-    </div>
+    <button
+      {...props}
+      className={`px-4 py-2 rounded-lg text-sm ${
+        active ? "bg-white text-black" : "bg-white/10"
+      }`}
+    >
+      {children}
+    </button>
   );
 }
 
-/*
-  Background glow elements
-  - Purely visual
-  - Safe to remove if judges want simplicity
-*/
+function NavButton({ disabled, children, ...props }: any) {
+  return (
+    <button
+      {...props}
+      disabled={disabled}
+      className="px-4 py-2 rounded-lg bg-white/10 disabled:opacity-30"
+    >
+      {children}
+    </button>
+  );
+}
+
 function GlowBackground() {
   return (
     <>
-      <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-600/30 blur-[120px]" />
-      <div className="absolute top-1/3 -right-40 w-125 h-125 bg-cyan-500/30 blur-[120px]" />
-      <div className="absolute bottom-0 left-1/3 w-125 h-125 bg-pink-500/20 blur-[120px]" />
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-purple-600/30 blur-[120px]" />
+      <div className="absolute top-1/3 -right-40 w-[500px] h-[500px] bg-cyan-500/30 blur-[120px]" />
+      <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] bg-pink-500/20 blur-[120px]" />
     </>
   );
 }
