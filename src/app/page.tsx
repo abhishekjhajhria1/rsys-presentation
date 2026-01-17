@@ -1,65 +1,219 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+/*
+  RSYS – Round 1 Presentation Website
+  ----------------------------------
+  Purpose:
+  - Explain the problem
+  - Show the enforcement-first design
+  - Heavy wireflow, minimal tech
+  - Used ONLY for Round 1 (Team A)
+
+  NOTE FOR LIVE EDITS:
+  - All text blocks are plain JSX
+  - You can safely edit wording during judging
+*/
+
+import Link from "next/link";
+
+export default function PresentationRound1() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
+      {/* Background glow layers (pure visual, no logic) */}
+      <GlowBackground />
+
+      {/* HERO SECTION */}
+      <section className="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6">
+        <h1 className="text-6xl md:text-7xl font-bold tracking-tight">
+          RSYS
+        </h1>
+
+        <p className="mt-6 text-xl text-slate-300 max-w-2xl">
+          A disaster relief system
+          <span className="text-white font-semibold">
+            {" "}where corruption is impossible by design.
+          </span>
+        </p>
+
+        {/* Optional navigation (you can remove if judges prefer clean view) */}
+        <div className="mt-10 flex gap-4">
+          <Link
+            href="/judge"
+            className="px-6 py-3 rounded-xl bg-white text-black font-medium"
+          >
+            Judge Mode (Later)
+          </Link>
+        </div>
+      </section>
+
+      {/* PROBLEM SECTION */}
+      <Section title="The Real Problem">
+        <WireCard>
+          <p className="text-slate-300">
+            Disaster relief systems do not fail at fundraising.
+            <br />
+            They fail after money is collected.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+          <ul className="list-disc list-inside mt-6 space-y-2 text-slate-400">
+            <li>No enforcement after donation</li>
+            <li>Opaque fund movement</li>
+            <li>Manual trust in administrators</li>
+            <li>No verifiable outcomes for donors</li>
+          </ul>
+        </WireCard>
+      </Section>
+
+      {/* SOLUTION SECTION */}
+      <Section title="The RSYS Approach">
+        <WireGrid>
+          <WireNode title="Enforcement First">
+            Rules are enforced by smart contracts,
+            not policies or promises.
+          </WireNode>
+
+          <WireNode title="Role-Based System">
+            Every actor operates under a strictly
+            limited on-chain role.
+          </WireNode>
+
+          <WireNode title="Funds Are Locked">
+            Donations cannot be withdrawn
+            without meeting contract conditions.
+          </WireNode>
+
+          <WireNode title="Fully Auditable">
+            Every action is verifiable on-chain,
+            by anyone.
+          </WireNode>
+        </WireGrid>
+      </Section>
+
+      {/* WIREFLOW SECTION (MOST IMPORTANT) */}
+      <Section title="End-to-End Enforcement Wireflow">
+        <WireFlow />
+      </Section>
+
+      {/* WHY THIS MATTERS */}
+      <Section title="Why This Is Different">
+        <WireCard>
+          <ul className="space-y-3 text-slate-300">
+            <li>✔ No backend authority</li>
+            <li>✔ No manual overrides</li>
+            <li>✔ No admin fund custody</li>
+            <li>✔ No trust assumptions</li>
+            <li>✔ Enforcement happens automatically</li>
+          </ul>
+        </WireCard>
+      </Section>
+
+      {/* CLOSING */}
+      <section className="relative z-10 py-32 text-center px-6">
+        <h2 className="text-4xl font-semibold">
+          Trust is replaced by code.
+        </h2>
+        <p className="mt-4 text-slate-400">
+          RSYS doesn’t promise transparency.
+          <br />
+          It enforces it.
+        </p>
+      </section>
+    </main>
+  );
+}
+
+/* ─────────────── UI HELPERS (SAFE TO EDIT) ─────────────── */
+
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
+      <h2 className="text-3xl font-semibold mb-12 text-center">
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function WireCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-white/20 bg-white/5 backdrop-blur-md p-8 max-w-3xl mx-auto">
+      {children}
     </div>
+  );
+}
+
+function WireGrid({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      {children}
+    </div>
+  );
+}
+
+function WireNode({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-md p-6">
+      <h3 className="font-semibold mb-2">{title}</h3>
+      <p className="text-slate-300 text-sm">{children}</p>
+    </div>
+  );
+}
+
+/*
+  WireFlow:
+  - Visual explanation of enforcement
+  - Do NOT over-explain during presentation
+*/
+function WireFlow() {
+  const steps = [
+    "Donor sends funds → Relief Pool",
+    "Admin approves campaign (no fund access)",
+    "Volunteer verifies victims",
+    "Service provider delivers aid",
+    "Treasury releases funds automatically",
+  ];
+
+  return (
+    <div className="space-y-6">
+      {steps.map((step, index) => (
+        <div key={index} className="flex items-center gap-4">
+          <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold">
+            {index + 1}
+          </div>
+
+          <div className="flex-1 rounded-xl border border-white/20 bg-white/5 backdrop-blur-md p-4">
+            {step}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/*
+  Background glow elements
+  - Purely visual
+  - Safe to remove if judges want simplicity
+*/
+function GlowBackground() {
+  return (
+    <>
+      <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-600/30 blur-[120px]" />
+      <div className="absolute top-1/3 -right-40 w-125 h-125 bg-cyan-500/30 blur-[120px]" />
+      <div className="absolute bottom-0 left-1/3 w-125 h-125 bg-pink-500/20 blur-[120px]" />
+    </>
   );
 }
