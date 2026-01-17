@@ -13,6 +13,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
+
 
 /* ───────────────── ANIMATION CONFIG ───────────────── */
 const slideVariants = {
@@ -35,6 +37,23 @@ export default function PresentationPage() {
 
   const slides = ["hero", "problem", "approach", "wireflow", "difference"];
   const current = slides[slideIndex];
+
+  useEffect(() => {
+  if (mode !== "slides") return;
+
+  function handleKey(e: KeyboardEvent) {
+    if (e.key === "ArrowRight") {
+      setSlideIndex((i) => Math.min(i + 1, slides.length - 1));
+    }
+    if (e.key === "ArrowLeft") {
+      setSlideIndex((i) => Math.max(i - 1, 0));
+    }
+  }
+
+  window.addEventListener("keydown", handleKey);
+  return () => window.removeEventListener("keydown", handleKey);
+}, [mode, slides.length]);
+
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-white overflow-hidden">
